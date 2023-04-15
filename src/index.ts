@@ -1,1 +1,2 @@
-import {middleWare} from 'redux';
+import {Middleware} from 'redux';
+
