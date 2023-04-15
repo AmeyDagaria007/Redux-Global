@@ -1,6 +1,6 @@
 {
   "name": "redux-global",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "using indexdb to store redux store ",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -14,7 +14,7 @@
     "url": "git+https://github.com/AmeyDagaria007/Redux-Global.git"
   },
   "author": "Amey Dagaria",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/AmeyDagaria007/Redux-Global/issues"
   },
