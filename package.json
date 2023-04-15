@@ -1,0 +1,23 @@
+{
+  "name": "redux-global",
+  "version": "1.0.0",
+  "description": "using indexdb to store redux store ",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build":"tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AmeyDagaria007/Redux-Global.git"
+  },
+  "author": "Amey Dagaria",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AmeyDagaria007/Redux-Global/issues"
+  },
+  "homepage": "https://github.com/AmeyDagaria007/Redux-Global#readme",
+  "devDependencies": {
+    "typescript": "^5.0.4"
+  }
+}
