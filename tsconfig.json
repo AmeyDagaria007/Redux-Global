@@ -6,8 +6,11 @@
         "outDir": "dist",
         "sourceMap": false,
         "strict": true,
-        "esModuleInterop": true
+        "esModuleInterop": true,
+        "declaration": true,
+        "emitDeclarationOnly": true,
+        "declarationDir": "dist/types"
     },
     "include": ["src/**/*"],
-    "exclude": ["node_modules"]
+    "exclude": ["node_modules","dist"]
 }
