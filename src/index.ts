@@ -1,5 +1,5 @@
 import {Middleware} from 'redux';
-import { opendatabase, saveDatabase } from './db';
+import { opendatabase, saveDatabase,readDatabaseStore,readDatabaseKey } from './db';
 
 let db :IDBDatabase | undefined = undefined
 let gbStoreName : string | undefined = undefined;
@@ -20,6 +20,21 @@ const dbMiddleWare:Middleware = (store) => (next) => (action) =>{
     return result
 }
 
+const hydrateReduxFromDB  = async (dbName : string,storeName:string)=>{
+   const hyDrateAction = (data:unknown) =>({
+    type:'HYDRATE_STORE_DB',
+    payload:data
+   })
+   let data = await readDatabaseStore(dbName,storeName)
+   return [data , hyDrateAction(data)]
+}
+
+const addTabsListner = (cb:()=>{})=>{
+    if(document != undefined){
+        document.addEventListener('visibilitychange',cb)
+    }
+}
+
 export {
-    createDB,dbMiddleWare
+    createDB,dbMiddleWare,hydrateReduxFromDB,addTabsListner
 }

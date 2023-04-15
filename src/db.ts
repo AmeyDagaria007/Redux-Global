@@ -40,10 +40,22 @@ export async function readDatabaseKey(db :IDBDatabase,key : string,storeName:str
    })
 }
 
-export async function readDatabaseStore(db:IDBDatabase,storeName:string):Promise<IDBObjectStore>{
+export async function readDatabaseStore(dbName:string,storeName:string):Promise<unknown>{
+    return new Promise((resolve,reject)=>{
+    const dbRequest = indexedDB.open(dbName)
+    dbRequest.onsuccess = ()=>{ 
+     const db = dbRequest.result      
     const transaction = db.transaction(storeName,'readonly')
     const store = transaction.objectStore(storeName)
-    return store
+    const resultRq = store.getAll()
+    resultRq.onerror = ()=>{
+        reject(resultRq.error)
+    }
+    resultRq.onsuccess = ()=>{
+        resolve(resultRq.result)
+    }
+    }
+    })
 }
 
 export async function saveDatabase(db:IDBDatabase,reduxStore:Record<string,unknown>,storeName:string):Promise<unknown>{
