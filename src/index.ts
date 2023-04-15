@@ -1,5 +1,5 @@
 import {Middleware} from 'redux';
-import { opendatabase, saveDatabase,readDatabaseStore,readDatabaseKey } from './db';
+import { opendatabase, saveDatabase,readDatabaseStore } from './db';
 
 let db :IDBDatabase | undefined = undefined
 let gbStoreName : string | undefined = undefined;
