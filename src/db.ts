@@ -8,10 +8,10 @@ Object.keys(storeJson).forEach((key)=>{
 })
 }
 
-export function opendatabase (name : string = 'redux-db',version : number = 1,store : Record<string,unknown>,storeName : string = 'redux-store'   ):Promise<IDBDatabase> {
+export function opendatabase (dbName : string ,version : number ,store : Record<string,unknown>,storeName : string    ):Promise<IDBDatabase> {
 return new Promise((resolve,reject)=>{
     let db : IDBDatabase;
-    const request = indexedDB.open(name,version)
+    const request = indexedDB.open(dbName,version)
     request.onerror = ()=>{
         console.error("Rejeected While Opening up DB")
         reject(request.error);
@@ -26,7 +26,7 @@ return new Promise((resolve,reject)=>{
 })
 }
 
-export async function readDatabaseKey(db :IDBDatabase,storeName:string = 'redux-store',key : string) :Promise<unknown>{
+export async function readDatabaseKey(db :IDBDatabase,key : string,storeName:string) :Promise<unknown>{
    const transaction = db.transaction(storeName,'readonly')
    const store = transaction.objectStore(storeName)
    const request =  store.get(key)
@@ -40,13 +40,13 @@ export async function readDatabaseKey(db :IDBDatabase,storeName:string = 'redux-
    })
 }
 
-export async function readDatabaseStore(db:IDBDatabase,storeName:string = 'redux-store'):Promise<IDBObjectStore>{
+export async function readDatabaseStore(db:IDBDatabase,storeName:string):Promise<IDBObjectStore>{
     const transaction = db.transaction(storeName,'readonly')
     const store = transaction.objectStore(storeName)
     return store
 }
 
-export async function saveDatabase(db:IDBDatabase,storeName:string = 'redux-store',reduxStore:Record<string,unknown>):Promise<unknown>{
+export async function saveDatabase(db:IDBDatabase,reduxStore:Record<string,unknown>,storeName:string):Promise<unknown>{
     const transaction = db.transaction(storeName,'readwrite')
     const store = transaction.objectStore(storeName)
     const request = store.put(reduxStore)
