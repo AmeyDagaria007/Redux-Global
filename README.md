@@ -1,51 +1,21 @@
 # Redux-Global
 
-This Package is aimed to store the redux state in indexDb so we can persisit it .
+This package aims  to use indexDB to persisist the Redux Store in Web Storage so it can be used everywhere.
 
-## How To Use 
-Create Database in IndexDB
+# Functions Exposed 
 
-function = createDB
+1 . createDB -> Call this function in index.ts or at earlieast to create a db in indexDB it takes databseName,version & storeName as Parameters 
 
-it has createDb function which you can call it as index.ts or at the start of your web app 
+2.dbMiddleWare -> Connect this middleware to your redux store middleware (Wheenver now redux store is updated db will be updated)
 
-Parameters
+3.hydrateReduxFromDB -> it takes the dbname and storename as paramaters use the same that you have proided during creation time and it returns an array of data and action [data,action]. you can use the data and create your own action or use redux-action directly with type HYDRATE_STORE_DB
 
-@dbName = Database Name 
-
-@version = version number 
-
-@storeName = name of the database store 
+4.addTabsListner -> It adds an listner to window when tab changes and runs and it takes an cb function which runs whenever tab is changed
 
 
-## Using it with React-Redux 
+Thank You 
 
-functin = dbMiddleWare
+Please raise issue on git if you are having any trouble 
 
-it exposes an middleware dbMiddleWare which you can plug in the redux store middleware 
-
-## Retrieve Data 
-
-function = hydrateReduxFromDB
-
-@parameters
-
-@dbName = Databse Name similiar to one that you have used in create one 
-
-@storeName = similar to one that you have used in create one 
-
-This function returns the data & redux-action as an array [data,action] 
-
-@@Returns - [db,action]
-
-to get data and make your own action you can use [0] as first argument is the data from store 
-to get action with type "HYDRATE_STORE_DB" and payload as data you can use [1]
-
-
-## It aslo exposes and function which takes input a callback function and runs when tab is changes 
-
-function = addTabsListner
-
-@parameter = cb = callback function which should be run when tab is changed
-
-
+Author:-
+Amey Dagaria
