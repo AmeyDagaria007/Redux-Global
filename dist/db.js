@@ -1,19 +1,15 @@
 "use strict";
-//Create a promise based IndexDB API 
+//Create a promise based IndexDB API
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.saveDatabase = exports.readDatabaseStore = exports.readDatabaseKey = exports.opendatabase = void 0;
-function createObjectStoreFromJSON(db, storeJson, storeName) {
-    const store = db.createObjectStore(storeName, { keyPath: 'key' });
-    Object.keys(storeJson).forEach((key) => {
-        store.createIndex(key, key, { unique: false });
-    });
+function createObjectStoreFromJSON(db, storeName) {
+    const store = db.createObjectStore(storeName, { autoIncrement: true });
 }
-function opendatabase(dbName, version, store, storeName) {
+function opendatabase(dbName, version, storeName) {
     return new Promise((resolve, reject) => {
-        let db;
         const request = indexedDB.open(dbName, version);
         request.onerror = () => {
-            console.error("Rejeected While Opening up DB");
+            console.error("Rejected While Opening up DB");
             reject(request.error);
         };
         request.onsuccess = () => {
@@ -21,17 +17,18 @@ function opendatabase(dbName, version, store, storeName) {
         };
         request.onupgradeneeded = () => {
             const db = request.result;
-            createObjectStoreFromJSON(db, store, storeName);
+            createObjectStoreFromJSON(db, storeName);
         };
     });
 }
 exports.opendatabase = opendatabase;
 async function readDatabaseKey(db, key, storeName) {
-    const transaction = db.transaction(storeName, 'readonly');
+    const transaction = db.transaction(storeName, "readonly");
     const store = transaction.objectStore(storeName);
     const request = store.get(key);
     return new Promise((resolve, reject) => {
         request.onerror = () => {
+            console.error("Error while Reading byKey");
             reject(request.error);
         };
         request.onsuccess = () => {
@@ -45,10 +42,11 @@ async function readDatabaseStore(dbName, storeName) {
         const dbRequest = indexedDB.open(dbName);
         dbRequest.onsuccess = () => {
             const db = dbRequest.result;
-            const transaction = db.transaction(storeName, 'readonly');
+            const transaction = db.transaction(storeName, "readonly");
             const store = transaction.objectStore(storeName);
             const resultRq = store.getAll();
             resultRq.onerror = () => {
+                console.error("Error while Reading The DB");
                 reject(resultRq.error);
             };
             resultRq.onsuccess = () => {
@@ -59,15 +57,23 @@ async function readDatabaseStore(dbName, storeName) {
 }
 exports.readDatabaseStore = readDatabaseStore;
 async function saveDatabase(db, reduxStore, storeName) {
-    const transaction = db.transaction(storeName, 'readwrite');
+    const transaction = db.transaction(storeName, "readwrite");
     const store = transaction.objectStore(storeName);
-    const request = store.put(reduxStore);
+    const delRq = store.clear();
     return new Promise((resolve, reject) => {
-        request.onerror = () => {
-            reject(request.error);
+        delRq.onsuccess = () => {
+            const request = store.add(reduxStore);
+            request.onerror = () => {
+                console.error("Error While Saving Data in DB");
+                reject(request.error);
+            };
+            request.onsuccess = () => {
+                resolve(request.result);
+            };
         };
-        request.onsuccess = () => {
-            resolve(request.result);
+        delRq.onerror = () => {
+            console.error("Error while Deleting Data from DB");
+            reject(delRq.error);
         };
     });
 }

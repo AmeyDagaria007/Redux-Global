@@ -4,9 +4,9 @@ exports.addTabsListner = exports.hydrateReduxFromDB = exports.dbMiddleWare = exp
 const db_1 = require("./db");
 let db = undefined;
 let gbStoreName = undefined;
-const createDB = async (dbName, version, store, storeName) => {
+const createDB = async (dbName, version, storeName) => {
     gbStoreName = storeName;
-    db = await (0, db_1.opendatabase)(dbName, version, store, gbStoreName);
+    db = await (0, db_1.opendatabase)(dbName, version, gbStoreName);
 };
 exports.createDB = createDB;
 const dbMiddleWare = (store) => (next) => (action) => {
@@ -16,15 +16,15 @@ const dbMiddleWare = (store) => (next) => (action) => {
         (0, db_1.saveDatabase)(db, state, gbStoreName);
     }
     else {
-        console.error('Cant Save as dn and gbStoreName is undefined');
+        console.error("Cant Save as database and StoreName is undefined");
     }
     return result;
 };
 exports.dbMiddleWare = dbMiddleWare;
 const hydrateReduxFromDB = async (dbName, storeName) => {
     const hyDrateAction = (data) => ({
-        type: 'HYDRATE_STORE_DB',
-        payload: data
+        type: "HYDRATE_STORE_DB",
+        payload: data,
     });
     let data = await (0, db_1.readDatabaseStore)(dbName, storeName);
     return [data, hyDrateAction(data)];
@@ -32,7 +32,7 @@ const hydrateReduxFromDB = async (dbName, storeName) => {
 exports.hydrateReduxFromDB = hydrateReduxFromDB;
 const addTabsListner = (cb) => {
     if (document != undefined) {
-        document.addEventListener('visibilitychange', cb);
+        document.addEventListener("visibilitychange", cb);
     }
 };
 exports.addTabsListner = addTabsListner;
