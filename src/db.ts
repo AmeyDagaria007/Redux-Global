@@ -1,11 +1,7 @@
 //Create a promise based IndexDB API
 
-function createObjectStoreFromJSON(
-  db: IDBDatabase,
-  storeName: string
-) {
-  const store = db.createObjectStore(storeName, { autoIncrement: true});
-  
+function createObjectStoreFromJSON(db: IDBDatabase, storeName: string) {
+  const store = db.createObjectStore(storeName, { autoIncrement: true });
 }
 
 export function opendatabase(
@@ -76,18 +72,18 @@ export async function saveDatabase(
   const transaction = db.transaction(storeName, "readwrite");
   const store = transaction.objectStore(storeName);
   const delRq = store.clear();
-  return new Promise((resolve,reject)=>{
-  delRq.onsuccess = ()=>{  
-  const request = store.add(reduxStore);
-    request.onerror = () => {
-      reject(request.error);
+  return new Promise((resolve, reject) => {
+    delRq.onsuccess = () => {
+      const request = store.add(reduxStore);
+      request.onerror = () => {
+        reject(request.error);
+      };
+      request.onsuccess = () => {
+        resolve(request.result);
+      };
     };
-    request.onsuccess = () => {
-      resolve(request.result);
+    delRq.onerror = () => {
+      reject(delRq.error);
     };
-  }
-  delRq.onerror = ()=>{
-    reject(delRq.error)
-  }
-  })
+  });
 }

@@ -4,11 +4,7 @@ import { opendatabase, saveDatabase, readDatabaseStore } from "./db";
 let db: IDBDatabase | undefined = undefined;
 let gbStoreName: string | undefined = undefined;
 
-const createDB = async (
-  dbName: string,
-  version: number,
-  storeName: string
-) => {
+const createDB = async (dbName: string, version: number, storeName: string) => {
   gbStoreName = storeName;
   db = await opendatabase(dbName, version, gbStoreName);
 };
