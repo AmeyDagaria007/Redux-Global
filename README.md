@@ -3,9 +3,13 @@ This Package is aimed to store the redux state in indexDb so we can persisit it 
 
 ## How To Use 
 Create Database in IndexDB
+
 function = createDB
+
 it has createDb function which you can call it as index.ts or at the start of your web app 
+
 Parameters
+
 @dbName = Database Name 
 @version = version number 
 @storeName = name of the database store 
