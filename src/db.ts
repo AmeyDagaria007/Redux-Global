@@ -2,23 +2,18 @@
 
 function createObjectStoreFromJSON(
   db: IDBDatabase,
-  storeJson: Record<string, unknown>,
   storeName: string
 ) {
-  const store = db.createObjectStore(storeName, { keyPath: "key" });
-  Object.keys(storeJson).forEach((key) => {
-    store.createIndex(key, key, { unique: false });
-  });
+  const store = db.createObjectStore(storeName, { autoIncrement: true});
+  
 }
 
 export function opendatabase(
   dbName: string,
   version: number,
-  store: Record<string, unknown>,
   storeName: string
 ): Promise<IDBDatabase> {
   return new Promise((resolve, reject) => {
-    let db: IDBDatabase;
     const request = indexedDB.open(dbName, version);
     request.onerror = () => {
       console.error("Rejeected While Opening up DB");
@@ -29,7 +24,7 @@ export function opendatabase(
     };
     request.onupgradeneeded = () => {
       const db = request.result;
-      createObjectStoreFromJSON(db, store, storeName);
+      createObjectStoreFromJSON(db, storeName);
     };
   });
 }
@@ -80,13 +75,19 @@ export async function saveDatabase(
 ): Promise<unknown> {
   const transaction = db.transaction(storeName, "readwrite");
   const store = transaction.objectStore(storeName);
-  const request = store.put(reduxStore);
-  return new Promise((resolve, reject) => {
+  const delRq = store.clear();
+  return new Promise((resolve,reject)=>{
+  delRq.onsuccess = ()=>{  
+  const request = store.add(reduxStore);
     request.onerror = () => {
       reject(request.error);
     };
     request.onsuccess = () => {
       resolve(request.result);
     };
-  });
+  }
+  delRq.onerror = ()=>{
+    reject(delRq.error)
+  }
+  })
 }

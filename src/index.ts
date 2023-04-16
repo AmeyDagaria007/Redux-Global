@@ -7,11 +7,10 @@ let gbStoreName: string | undefined = undefined;
 const createDB = async (
   dbName: string,
   version: number,
-  store: Record<string, unknown>,
   storeName: string
 ) => {
   gbStoreName = storeName;
-  db = await opendatabase(dbName, version, store, gbStoreName);
+  db = await opendatabase(dbName, version, gbStoreName);
 };
 
 const dbMiddleWare: Middleware = (store) => (next) => (action) => {
