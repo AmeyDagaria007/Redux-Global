@@ -15,7 +15,7 @@ const dbMiddleWare: Middleware = (store) => (next) => (action) => {
   if (db != undefined && gbStoreName != undefined) {
     saveDatabase(db, state, gbStoreName);
   } else {
-    console.error("Cant Save as dn and gbStoreName is undefined");
+    console.error("Cant Save as database and StoreName is undefined");
   }
   return result;
 };

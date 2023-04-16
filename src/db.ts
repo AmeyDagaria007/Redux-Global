@@ -12,7 +12,7 @@ export function opendatabase(
   return new Promise((resolve, reject) => {
     const request = indexedDB.open(dbName, version);
     request.onerror = () => {
-      console.error("Rejeected While Opening up DB");
+      console.error("Rejected While Opening up DB");
       reject(request.error);
     };
     request.onsuccess = () => {
@@ -35,6 +35,7 @@ export async function readDatabaseKey(
   const request = store.get(key);
   return new Promise((resolve, reject) => {
     request.onerror = () => {
+      console.error("Error while Reading byKey")
       reject(request.error);
     };
     request.onsuccess = () => {
@@ -55,6 +56,7 @@ export async function readDatabaseStore(
       const store = transaction.objectStore(storeName);
       const resultRq = store.getAll();
       resultRq.onerror = () => {
+        console.error("Error while Reading The DB")
         reject(resultRq.error);
       };
       resultRq.onsuccess = () => {
@@ -76,6 +78,7 @@ export async function saveDatabase(
     delRq.onsuccess = () => {
       const request = store.add(reduxStore);
       request.onerror = () => {
+        console.error("Error While Saving Data in DB")
         reject(request.error);
       };
       request.onsuccess = () => {
@@ -83,6 +86,7 @@ export async function saveDatabase(
       };
     };
     delRq.onerror = () => {
+      console.error("Error while Deleting Data from DB")
       reject(delRq.error);
     };
   });
